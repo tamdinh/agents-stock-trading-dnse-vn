@@ -103,7 +103,7 @@ bun run start
 
 - **Runtime:** Bun
 - **Orchestration:** LangGraph.js (Subgraphs, Interrupts, Conditional Edges)
-- **Persistence:** SQLite Checkpoint + Time-travel
+- **Checkpointing:** In-memory checkpoints for interrupts/resume during the current process
 - **LLM:** Multi-provider (NVIDIA, OpenAI, Anthropic, Google, Ollama, DeepSeek)
 - **Tools:** Direct DynamicTool (10 DNSE + Web search)
 - **Language:** TypeScript

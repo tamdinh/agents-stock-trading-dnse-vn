@@ -10,7 +10,7 @@ import { PaperPortfolioTracker } from "./portfolio/tracker";
 import { createBot, setupErrorHandler, createWhitelistMiddleware } from "./telegram/bot";
 import { setupHandlers } from "./telegram/handlers";
 import { startCronJobs } from "./scheduler/cron";
-import { SqliteSaver } from "@langchain/langgraph-checkpoint-sqlite";
+import { MemorySaver } from "@langchain/langgraph";
 import * as readline from "readline";
 
 // ==================== CONFIG ====================
@@ -24,13 +24,13 @@ const llmManager = new LLMManager({
 
 const portfolioTracker = new PaperPortfolioTracker();
 
-// Checkpointer dùng chung cho toàn bộ session
-// Lưu tại .data/checkpoints.db (cùng thư mục với SQLite paper trading)
-let checkpointer: SqliteSaver | null = null;
+// Checkpointer dùng chung trong thời gian tiến trình đang chạy.
+let checkpointer: MemorySaver | null = null;
 
-async function getCheckpointer(): Promise<SqliteSaver> {
+async function getCheckpointer(): Promise<MemorySaver> {
   if (!checkpointer) {
-    checkpointer = await SqliteSaver.fromConnString("file:.data/checkpoints.db");
+    checkpointer = new MemorySaver();
+    console.log("[Checkpoint] Dùng bộ nhớ trong; checkpoints sẽ mất khi tiến trình thoát");
   }
   return checkpointer;
 }

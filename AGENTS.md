@@ -57,7 +57,7 @@ src/
 ## LangGraph Features
 
 - **Subgraphs:** Tách graph thành analysts, debate, risk subgraphs
-- **Persistence:** SQLite checkpoint, resume khi crash
+- **Checkpoints:** In-memory checkpoints for interrupts/resume while the process is running; cleared on exit
 - **Time-travel:** Quay lại trạng thái bất kỳ
 - **Interrupts:** Dừng graph để user confirm
 - **Fault tolerance:** Retry + error handling tự động
@@ -76,5 +76,5 @@ Required in `.env`:
 - `src/mcp/` and `src/mcp-client.ts` are excluded from type checking (reserved for standalone MCP project)
 - `firecrawl/` directory is a git submodule, excluded from `.gitignore`
 - `mcp-standalone/` is a separate MCP project, not part of main build
-- SQLite checkpoints saved to `checkpoints.db` (gitignored)
+- LangGraph checkpoint state is in memory and is cleared when the process exits
 - Memory logs saved to `.memory/` directory

@@ -1,4 +1,4 @@
-import { StateGraph, START, END } from "@langchain/langgraph";
+import { StateGraph, START, END, MemorySaver } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
 import type { DataSnapshot, TraderOutput, RiskDebateState } from "../types/index";
 import { runResearchManager } from "../agents/managers/research-manager";
@@ -11,7 +11,6 @@ import { createAnalystsSubgraph } from "./subgraphs/analysts";
 import { createDebateSubgraph } from "./subgraphs/debate";
 import { createRiskSubgraph } from "./subgraphs/risk";
 import { INTERRUPT_NODES, displayInterruptSummary, askUserConfirm } from "./interrupts";
-import { SqliteSaver } from "@langchain/langgraph-checkpoint-sqlite";
 import * as readline from "readline";
 
 // ==================== BUILD DATA SNAPSHOT ====================
@@ -235,7 +234,7 @@ function createNodes(llm: ChatOpenAI, deepLlm: ChatOpenAI) {
 export function buildTradingGraph(
   llm: ChatOpenAI,
   deepLlm: ChatOpenAI,
-  checkpointer?: SqliteSaver
+  checkpointer?: MemorySaver
 ) {
   const n = createNodes(llm, deepLlm);
 
@@ -280,7 +279,7 @@ export async function analyze(
   ticker: string,
   date: string,
   options: {
-    checkpointer?: SqliteSaver;
+    checkpointer?: MemorySaver;
     rl?: readline.Interface;
     /** Tắt interrupt (dùng khi gọi từ LangGraph Studio hoặc test) */
     noInterrupt?: boolean;

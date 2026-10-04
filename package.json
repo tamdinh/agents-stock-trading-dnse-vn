@@ -4,10 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run src/index.ts",
+    "db:generate": "prisma generate",
+    "start": "bun run db:generate && bun run src/index.ts",
     "studio": "npx @langchain/langgraph-cli dev",
-    "start:all": "bun run start.ts",
-    "dev": "bun --watch run src/index.ts"
+    "start:all": "bun run db:generate && bun run start.ts",
+    "dev": "bun run db:generate && bun --watch run src/index.ts"
   },
   "devDependencies": {
     "@langchain/langgraph-cli": "^1.4.3",
@@ -21,7 +22,6 @@
     "@langchain/core": "^1.2.3",
     "@langchain/google-genai": "^2.2.0",
     "@langchain/langgraph": "^1.4.8",
-    "@langchain/langgraph-checkpoint-sqlite": "^1.0.3",
     "@langchain/openai": "^1.5.5",
     "@langchain/tavily": "^1.2.0",
     "@modelcontextprotocol/sdk": "^1.29.0",

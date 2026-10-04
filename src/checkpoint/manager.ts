@@ -1,25 +1,16 @@
-import { SqliteSaver } from "@langchain/langgraph-checkpoint-sqlite";
+import { MemorySaver } from "@langchain/langgraph";
 
 // ==================== CHECKPOINT MANAGER ====================
 
-export interface CheckpointConfig {
-  connString?: string;
-}
-
 export class CheckpointManager {
-  private checkpointer: SqliteSaver | null = null;
-  private connString: string;
-
-  constructor(config: CheckpointConfig = {}) {
-    this.connString = config.connString || "file:checkpoints.db";
-  }
+  private checkpointer: MemorySaver | null = null;
 
   async initialize(): Promise<void> {
-    this.checkpointer = await SqliteSaver.fromConnString(this.connString);
+    this.checkpointer = new MemorySaver();
     console.log("[Checkpoint] Đã khởi tạo");
   }
 
-  getCheckpointer(): SqliteSaver {
+  getCheckpointer(): MemorySaver {
     if (!this.checkpointer) {
       throw new Error("Checkpointer not initialized. Call initialize() first.");
     }
@@ -57,6 +48,6 @@ export class CheckpointManager {
     if (checkpoints.length <= keepLast) return;
 
     console.log(`[Checkpoint] Đang dọn dẹp ${checkpoints.length - keepLast} đ checkpoints cũ cho ${threadId}`);
-    // SqliteSaver tự quản lý, không cần prune thủ công
+    // MemorySaver retains checkpoints for the lifetime of the process.
   }
 }
